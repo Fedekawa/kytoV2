@@ -1,103 +1,149 @@
-'use client'
+'use client';
 
-import { Button } from "@/components/ui/button"
-import { motion } from "framer-motion"
-
-const stats = [
-  { value: "78%", label: "Want to adopt AI" },
-  { value: "40%", label: "More productivity" },
-  { value: "35%", label: "Plan to invest" }
-]
-
-const features = [
-  "Document Processing",
-  "Customer Service",
-  "Process Automation",
-  "Data Analysis"
-]
+import { motion } from 'framer-motion';
 
 export function HeroSection(): JSX.Element {
   return (
-    <section className="relative min-h-[90vh] bg-gradient-to-br from-primary/10 to-transparent">
-      <div className="absolute inset-0 bg-cover bg-center opacity-20" style={{ backgroundImage: 'url(/path/to/image.jpg)' }}></div>
-      <div className="container mx-auto px-4 py-20 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          {/* Left Column - Content */}
+    <section className="min-h-screen w-full bg-gradient-to-b from-blue-50 via-blue-100 to-transparent relative overflow-hidden">
+      <div className="container mx-auto px-4 h-screen flex flex-col items-center justify-center">
+        {/* Headline */}
+        <motion.h1 
+          className="text-4xl md:text-6xl lg:text-7xl font-bold text-center max-w-4xl mx-auto mb-24"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
+          Transform Your Business with AI in{' '}
+          <span className="text-primary">Days, Not Months</span>
+        </motion.h1>
+
+        {/* Desktop Cards Container */}
+        <div className="hidden lg:block absolute inset-0 pointer-events-none">
+          {/* Left Card */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
+            className="absolute top-[55%] left-[15%] transform -translate-y-1/2 pointer-events-auto"
+            initial={{ opacity: 0, x: -100 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.3 }}
+            whileHover={{ 
+              scale: 1.05,
+              rotate: [-1, 1],
+              transition: { 
+                rotate: {
+                  repeat: Infinity,
+                  duration: 0.3,
+                  repeatType: "reverse"
+                }
+              }
+            }}
+            drag
+            dragConstraints={{
+              top: -100,
+              left: -100,
+              right: 100,
+              bottom: 100,
+            }}
           >
-            <h1 className="text-4xl md:text-6xl font-bold text-secondary mb-6 drop-shadow-lg">
-              Transform Your Business with AI in{' '}
-              <span className="text-primary">Days, Not Months</span>
-            </h1>
-            
-            <p className="text-lg md:text-xl text-neutral-600 mb-8 max-w-xl">
-              Simple AI solutions that deliver immediate results. 10x more efficient, 
-              10x more affordable, ready to deploy.
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-4 mb-12">
-              <Button size="lg" className="text-base hover:scale-105 transition-transform">Get Started</Button>
-              <Button size="lg" variant="outline" className="text-base hover:scale-105 transition-transform">View Case Studies</Button>
-            </div>
-
-            {/* Stats */}
-            <div className="grid grid-cols-3 gap-8 border-t pt-8">
-              {stats.map(({ value, label }) => (
-                <motion.div
-                  key={label}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.2 }}
-                >
-                  <div className="text-3xl font-bold text-secondary mb-2">{value}</div>
-                  <div className="text-sm text-neutral-600">{label}</div>
-                </motion.div>
-              ))}
+            <div className="bg-white p-6 rounded-xl shadow-lg w-[280px] cursor-grab active:cursor-grabbing">
+              <h3 className="text-xl font-bold text-center mb-2">78% of SMBs</h3>
+              <p className="text-neutral-600 text-center">Want to adopt AI</p>
             </div>
           </motion.div>
 
-          {/* Right Column - Floating Card */}
+          {/* Right Card */}
           <motion.div
-            initial={{ opacity: 0, x: 20 }}
+            className="absolute top-[10%] right-[40%] transform -translate-y-1/2 pointer-events-auto"
+            initial={{ opacity: 0, x: 100 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="relative max-w-md mx-auto"
+            transition={{ delay: 0.4 }}
+            whileHover={{ 
+              scale: 1.05,
+              rotate: [-1, 1],
+              transition: { 
+                rotate: {
+                  repeat: Infinity,
+                  duration: 0.3,
+                  repeatType: "reverse"
+                }
+              }
+            }}
+            drag
+            dragConstraints={{
+              top: -100,
+              left: -100,
+              right: 100,
+              bottom: 100,
+            }}
           >
-            <div className="relative">
-              {/* Background blur effect */}
-              <div className="absolute -top-10 -right-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl" />
-              
-              {/* Card */}
-              <motion.div
-                className="relative bg-white rounded-2xl shadow-xl p-8"
-                whileHover={{ y: -5 }}
-                transition={{ duration: 0.2 }}
-              >
-                <h3 className="text-xl font-semibold text-secondary mb-6">
-                  Smart Solutions for:
-                </h3>
-                <div className="space-y-4">
-                  {features.map((feature, index) => (
-                    <motion.div
-                      key={feature}
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.4 + index * 0.1 }}
-                      className="flex items-center gap-3"
-                    >
-                      <div className="h-2 w-2 rounded-full bg-primary" />
-                      <span className="text-neutral-700">{feature}</span>
-                    </motion.div>
-                  ))}
-                </div>
-              </motion.div>
+            <div className="bg-white p-6 rounded-xl shadow-lg w-[280px] cursor-grab active:cursor-grabbing">
+              <h3 className="text-xl font-bold text-center mb-2">40% Productivity</h3>
+              <p className="text-neutral-600 text-center">Boost with AI and automation</p>
+            </div>
+          </motion.div>
+
+          {/* Bottom Card */}
+          <motion.div
+            className="absolute top-[55%] right-[15%] transform -translate-y-1/2 pointer-events-auto"
+            initial={{ opacity: 0, y: 100 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+            whileHover={{ 
+              scale: 1.05,
+              rotate: [-1, 1],
+              transition: { 
+                rotate: {
+                  repeat: Infinity,
+                  duration: 0.3,
+                  repeatType: "reverse"
+                }
+              }
+            }}
+            drag
+            dragConstraints={{
+              top: -100,
+              left: -100,
+              right: 100,
+              bottom: 100,
+            }}
+          >
+            <div className="bg-white p-6 rounded-xl shadow-lg w-[280px] cursor-grab active:cursor-grabbing">
+              <h3 className="text-xl font-bold text-center mb-2">35% of SMBs plan</h3>
+              <p className="text-neutral-600 text-center">To invest within 12 months</p>
             </div>
           </motion.div>
         </div>
+
+        {/* Mobile Cards */}
+        <div className="lg:hidden space-y-6">
+          {[
+            { title: "78% of SMBs", desc: "Want to adopt AI" },
+            { title: "50% Productivity", desc: "Boost with AI and automation" },
+            { title: "35% Investment", desc: "Plan to invest within 12 months" }
+          ].map((card, index) => (
+            <motion.div
+              key={index}
+              className="bg-white p-6 rounded-xl shadow-lg w-[280px] mx-auto"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.2 }}
+              whileHover={{ 
+                scale: 1.05,
+                rotate: [-1, 1],
+                transition: { 
+                  rotate: {
+                    repeat: Infinity,
+                    duration: 0.3,
+                    repeatType: "reverse"
+                  }
+                }
+              }}
+            >
+              <h3 className="text-xl font-bold text-center mb-2">{card.title}</h3>
+              <p className="text-neutral-600 text-center">{card.desc}</p>
+            </motion.div>
+          ))}
+        </div>
       </div>
     </section>
-  )
+  );
 }

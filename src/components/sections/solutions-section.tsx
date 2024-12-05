@@ -41,7 +41,7 @@ const solutions = [
 
 export function SolutionsSection(): JSX.Element {
   return (
-    <section className="py-24 bg-white" id="solutions">
+    <section className="py-24 bg-transparent relative -mt-20" id="solutions">
       <div className="container mx-auto px-4">
         {/* Header */}
         <motion.div
@@ -51,16 +51,19 @@ export function SolutionsSection(): JSX.Element {
           transition={{ duration: 0.5 }}
           className="text-center max-w-3xl mx-auto mb-16"
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-secondary mb-4">
+          <h2 className="text-3xl md:text-5xl font-bold text-secondary mb-6">
             Your Business + AI
           </h2>
-          <p className="text-lg text-neutral-600">
+          <p className="text-lg md:text-xl text-neutral-600 mb-4">
             We create customized integrations that adapt to your existing processes
+          </p>
+          <p className="text-base md:text-lg text-neutral-500">
+            Start seeing results in days, not months
           </p>
         </motion.div>
 
         {/* Solutions Grid */}
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-3 gap-8 relative z-10">
           {solutions.map((solution, index) => (
             <motion.div
               key={solution.title}
@@ -69,7 +72,7 @@ export function SolutionsSection(): JSX.Element {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
             >
-              <Card className="h-full hover:shadow-lg transition-all duration-300 hover:scale-105">
+              <Card className="h-full hover:shadow-lg transition-all duration-300 hover:scale-105 bg-white/80 backdrop-blur-sm">
                 <CardHeader>
                   <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
                     <solution.icon className="w-6 h-6 text-primary" />
@@ -111,10 +114,23 @@ export function SolutionsSection(): JSX.Element {
           transition={{ duration: 0.5, delay: 0.5 }}
           className="text-center mt-16"
         >
-          <p className="text-lg text-neutral-600 mb-4">
+          <p className="text-lg text-neutral-600 mb-6">
             Each solution is unique because each business is unique
           </p>
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="bg-primary text-white px-8 py-3 rounded-lg font-semibold shadow-lg hover:bg-primary/90 transition-colors"
+          >
+            Start Your AI Journey
+          </motion.button>
         </motion.div>
+
+        {/* Background Elements */}
+        <div className="absolute inset-0 -z-10 overflow-hidden">
+          <div className="absolute top-1/4 left-0 w-72 h-72 bg-primary/5 rounded-full blur-3xl" />
+          <div className="absolute bottom-1/4 right-0 w-72 h-72 bg-primary/5 rounded-full blur-3xl" />
+        </div>
       </div>
     </section>
   )
