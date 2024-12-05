@@ -1,5 +1,6 @@
-import Link from 'next/link'
-import { Button } from "@/components/ui/button"
+import Link from 'next/link';
+import Image from 'next/image'; // Import the Next.js Image component
+import { Button } from '@/components/ui/button';
 
 export function Header() {
   return (
@@ -7,7 +8,13 @@ export function Header() {
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         {/* Logo */}
         <Link href="/" className="flex items-center">
-          <span className="text-2xl font-bold text-secondary">Kyto</span>
+          <Image
+            src="/transparent.svg" // Path to your logo file
+            alt="Kyto Logo"
+            width={120} // Adjust as needed
+            height={40} // Adjust as needed
+            priority // Optimize for fast loading
+          />
         </Link>
 
         {/* Navigation */}
@@ -31,7 +38,7 @@ export function Header() {
             Methodology
           </Link>
           <Link 
-            href="#about" 
+            href="/about" 
             className="text-sm font-medium text-neutral-700 hover:text-secondary"
           >
             About
@@ -46,5 +53,5 @@ export function Header() {
         </div>
       </div>
     </header>
-  )
+  );
 }

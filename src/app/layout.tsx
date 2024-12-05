@@ -27,12 +27,12 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body className={`${poppins.variable} ${lato.variable} flex min-h-screen flex-col`}>
+    <html lang="en" className="scroll-smooth">
+      <body className={`${poppins.variable} ${lato.variable}`}>
         <Header />
-        <main className="flex-grow">
+        <div className="pt-16"> {/* Added padding-top for fixed header */}
           {children}
-        </main>
+        </div>
         <Footer />
       </body>
     </html>
