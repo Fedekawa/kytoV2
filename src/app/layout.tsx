@@ -1,23 +1,11 @@
-import type { Metadata } from 'next'
-import { Poppins, Lato } from 'next/font/google'
-import { Header } from '@/components/layout/header'
-import { Footer } from '@/components/layout/footer'
+import { Providers } from '@/components/providers'
+import { Inter } from 'next/font/google'
 import './globals.css'
 
-const poppins = Poppins({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-  variable: '--font-poppins',
-})
+const inter = Inter({ subsets: ['latin'] })
 
-const lato = Lato({
-  subsets: ['latin'],
-  weight: ['400', '700'],
-  variable: '--font-lato',
-})
-
-export const metadata: Metadata = {
-  title: 'Kyto - AI Solutions',
+export const metadata = {
+  title: 'Your AI Solutions',
   description: 'Transform your business with AI in days, not months',
 }
 
@@ -27,13 +15,9 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className="scroll-smooth">
-      <body className={`${poppins.variable} ${lato.variable}`}>
-        <Header />
-        <div className="pt-16"> {/* Added padding-top for fixed header */}
-          {children}
-        </div>
-        <Footer />
+    <html lang="en" suppressHydrationWarning>
+      <body className={inter.className}>
+        <Providers>{children}</Providers>
       </body>
     </html>
   )
