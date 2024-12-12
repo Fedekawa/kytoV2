@@ -1,5 +1,7 @@
 import { Providers } from '@/components/providers'
 import { Header } from '@/components/layout/header'
+import { PageTransition } from '@/components/layout/page-transition'
+import { BackgroundDecoration } from '@/components/layout/background-decoration'
 import { Inter } from 'next/font/google'
 import './globals.css'
 
@@ -17,11 +19,18 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className="scroll-smooth">
-      <body className={`${inter.className} overflow-x-hidden`}>
+    <html lang="en">
+      <body className={`${inter.className} prevent-horizontal-scroll antialiased`}>
         <Providers>
-          <Header />
-          {children}
+          <div className="relative min-h-screen flex flex-col">
+            <Header />
+            <PageTransition>
+              <BackgroundDecoration />
+              <main className="flex-grow">
+                {children}
+              </main>
+            </PageTransition>
+          </div>
         </Providers>
       </body>
     </html>
