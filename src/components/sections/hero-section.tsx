@@ -1,194 +1,116 @@
 'use client';
 
+import React from 'react';
+import { motion } from 'framer-motion';
+import { ArrowRight, Star, CheckCircle } from 'lucide-react';
 
-import React, { useEffect, useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { ArrowDownCircle, Zap, Brain, Code } from 'lucide-react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { ParticleBackground } from './particle-background';
+const stats = [
+  { value: '78%', label: 'SMBs Seeking AI' },
+  { value: '40%', label: 'Productivity Increase' },
+  { value: '10x', label: 'Cost Reduction' },
+];
 
-gsap.registerPlugin(ScrollTrigger);
-
-const featureCards = [
-  {
-    icon: Zap,
-    title: "Quick Setup",
-    description: "Deploy AI in weeks, not months.",
-    color: "text-yellow-500",
-    gradient: "from-yellow-500/20 to-yellow-500/5"
-  },
-  {
-    icon: Brain,
-    title: "Smart Solutions",
-    description: "AI tailored to your business needs.",
-    color: "text-blue-500",
-    gradient: "from-blue-500/20 to-blue-500/5"
-  },
-  {
-    icon: Code,
-    title: "Zero Complexity",
-    description: "Effortless implementation with our solutions.",
-    color: "text-purple-500",
-    gradient: "from-purple-500/20 to-purple-500/5"
-  }
+const trustPoints = [
+  "No-code implementation",
+  "Results in days",
+  "Pay as you grow",
 ];
 
 export function HeroSection() {
-  const container = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: container,
-    offset: ["start start", "end start"]
-  });
-
-  const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
-  const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      // Animate title words
-      gsap.from(".word", {
-        opacity: 0,
-        y: 100,
-        duration: 1,
-        stagger: 0.1,
-        ease: "power4.out",
-      });
-
-      // Animate feature cards
-      gsap.from(".feature-card", {
-        opacity: 0,
-        y: 50,
-        duration: 0.8,
-        stagger: 0.2,
-        ease: "power3.out",
-        delay: 0.5
-      });
-
-      // Floating animation for background elements
-      gsap.to(".floating-element", {
-        y: -20,
-        duration: 2,
-        repeat: -1,
-        yoyo: true,
-        ease: "power1.inOut",
-        stagger: {
-          each: 0.2,
-          from: "random"
-        }
-      });
-    }, container);
-
-    return () => ctx.revert();
-  }, []);
-
   return (
-    <section 
-      ref={container} 
-      className="relative min-h-screen w-full overflow-hidden"
-    >
-      <ParticleBackground />
-
-      {/* Content Container */}
-      <motion.div 
-        style={{ y, opacity }}
-        className="container mx-auto px-4 pt-32 pb-16 relative z-10"
-      >
-        {/* Hero Title */}
-        <div className="text-center max-w-5xl mx-auto mb-16">
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-8 leading-tight">
-            {/* Split text for individual word animation */}
-            {'Transform your business with'.split(' ').map((word, i) => (
-              <span key={i} className="word inline-block mr-4">
-                {word}
-              </span>
-            ))}
-            <span className="word block text-gradient">
-              AI in days, not months
-            </span>
-          </h1>
-          <motion.p 
-            className="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto"
+    <section className="relative min-h-screen pt-24">
+      <div className="container mx-auto px-4 pt-16 md:pt-24 relative z-10">
+        <div className="max-w-5xl mx-auto text-center">
+          {/* Trust Badge */}
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1 }}
+            transition={{ duration: 0.6 }}
+            className="inline-flex items-center gap-2 bg-[#002e88]/10 px-4 py-2 rounded-full mb-8"
           >
-            Join the 78% of SMBs already leveraging AI to increase productivity by 40%.
+            <Star className="w-5 h-5 text-[#002e88]" fill="#002e88" />
+            <span className="text-sm font-semibold text-[#002e88]">
+              Trusted by 500+ SMBs
+            </span>
+          </motion.div>
+
+          {/* Main Headline */}
+          <motion.h1
+            className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            <span className="block text-[#002e88]">
+              AI Implementation in
+            </span>
+            <span className="text-gradient-brand">
+              Days, Not Months
+            </span>
+          </motion.h1>
+
+          {/* Subheadline */}
+          <motion.p 
+            className="text-xl md:text-2xl text-[#002e88]/80 mb-8"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+          >
+            10x Faster, 10x More Affordable AI Solutions for Your Business
           </motion.p>
-        </div>
 
-        {/* Feature Cards */}
-        <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto mb-16">
-          {featureCards.map((card, index) => (
-            <motion.div
-              key={card.title}
-              className={`feature-card relative rounded-2xl overflow-hidden 
-                         glassmorphism p-6 backdrop-blur-lg
-                         transition-all duration-300 hover:scale-105`}
-              whileHover={{ y: -5 }}
-            >
-              {/* Background Gradient */}
-              <div className={`absolute inset-0 bg-gradient-to-br ${card.gradient} -z-10`} />
-              
-              <div className="flex items-start gap-4">
-                <div className={`p-3 rounded-xl ${card.color} bg-current/10`}>
-                  <card.icon className={`w-6 h-6 ${card.color}`} />
-                </div>
-                <div>
-                  <h3 className="text-xl font-bold mb-2">{card.title}</h3>
-                  <p className="text-gray-600">{card.description}</p>
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-
-        {/* CTA Section */}
-        <motion.div 
-          className="text-center"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.5 }}
-        >
-          <motion.button
-            className="btn-primary text-lg"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+          {/* CTA Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.6 }}
+            className="space-y-4"
           >
-            Start Your AI Journey
-            <span className="absolute inset-0 bg-white/20 transform -skew-x-12 
-                           translate-x-full group-hover:translate-x-[-100%] 
-                           transition-transform duration-700" />
-          </motion.button>
-        </motion.div>
+            {/* Primary CTA */}
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="btn-primary text-lg group"
+            >
+              Start Now
+              <ArrowRight className="inline-block ml-2 group-hover:translate-x-1 transition-transform" />
+            </motion.button>
 
-        {/* Scroll Indicator */}
-        <motion.div 
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
-          animate={{ y: [0, 10, 0] }}
-          transition={{ 
-            duration: 1.5,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-        >
-          <ArrowDownCircle className="w-10 h-10 text-primary/50" />
-        </motion.div>
+            {/* Trust Points */}
+            <div className="flex flex-wrap justify-center gap-4 mt-6">
+              {trustPoints.map((point) => (
+                <div
+                  key={point}
+                  className="flex items-center gap-2 text-[#002e88]/70"
+                >
+                  <CheckCircle className="w-4 h-4 text-[#00e5e5]" />
+                  <span className="text-sm font-medium">{point}</span>
+                </div>
+              ))}
+            </div>
+          </motion.div>
 
-        {/* Floating Background Elements */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          {[...Array(20)].map((_, i) => (
-            <div
-              key={i}
-              className="floating-element absolute w-2 h-2 rounded-full bg-primary/10"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`
-              }}
-            />
-          ))}
+          {/* Stats */}
+          <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto mt-16">
+            {stats.map((stat) => (
+              <motion.div
+                key={stat.value}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.8 }}
+                className="glassmorphism p-6 rounded-xl"
+              >
+                <div className="text-3xl font-bold text-[#002e88] mb-2">
+                  {stat.value}
+                </div>
+                <div className="text-sm text-[#002e88]/70">
+                  {stat.label}
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
-      </motion.div>
+      </div>
     </section>
   );
 }

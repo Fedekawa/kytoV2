@@ -4,25 +4,32 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
+    /* Core Brand Colors */
+    --primary: 220 100% 27%;    /* #002e88 - Deep Blue */
+    --primary-light: 210 100% 50%;  /* #007BFF - Bright Blue */
+    --accent: 180 100% 45%;     /* #00e5e5 - Cyan */
+    
+    /* Neutral Colors */
+    --neutral-100: 240 20% 98%;  /* #F2F2F7 - Light Grey */
+    --neutral-200: 240 3% 83%;   /* #D1D1D6 - Medium Grey */
+    
+    /* Semantic Colors */
+    --background: 0 0% 100%;     /* White */
+    --foreground: 220 100% 27%;  /* Primary as text */
+    
+    /* Component Colors */
     --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
+    --card-foreground: 220 100% 27%;
     --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
-    --primary: 240 5.9% 10%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 240 4.8% 95.9%;
-    --secondary-foreground: 240 5.9% 10%;
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
-    --accent: 240 4.8% 95.9%;
-    --accent-foreground: 240 5.9% 10%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
-    --ring: 240 5.9% 10%;
+    --popover-foreground: 220 100% 27%;
+    --primary-foreground: 0 0% 100%;
+    
+    /* UI Elements */
+    --border: 240 3% 83%;
+    --input: 240 3% 83%;
+    --ring: 180 100% 45%;
+    
+    /* Border Radius */
     --radius: 0.75rem;
   }
 }
@@ -36,75 +43,101 @@
   }
 }
 
+/* Brand Gradient Utilities */
+@layer utilities {
+  .bg-gradient-brand {
+    @apply bg-gradient-to-r from-[#002e88] via-[#007BFF] to-[#00e5e5];
+  }
+  
+  .text-gradient-brand {
+    @apply bg-gradient-brand bg-clip-text text-transparent;
+  }
+
+  .bg-gradient-subtle {
+    @apply bg-gradient-to-br from-[#F2F2F7] via-white to-[#D1D1D6]/50;
+  }
+}
+
+/* Component Base Styles */
 @layer components {
-  .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary via-blue-600 to-purple-600;
+  .btn-primary {
+    @apply bg-[#002e88] hover:bg-[#007BFF] text-white 
+           font-semibold py-3 px-6 rounded-lg
+           transition-all duration-300 ease-out
+           shadow-[0_0_0_3px_rgba(0,46,136,0.1)]
+           hover:shadow-[0_0_0_3px_rgba(0,123,255,0.2)];
+  }
+
+  .btn-secondary {
+    @apply bg-[#00e5e5] hover:bg-[#00e5e5]/90 text-[#002e88]
+           font-semibold py-3 px-6 rounded-lg
+           transition-all duration-300 ease-out;
+  }
+
+  .btn-outline {
+    @apply bg-transparent border-2 border-[#002e88] text-[#002e88]
+           hover:bg-[#002e88] hover:text-white
+           font-semibold py-3 px-6 rounded-lg
+           transition-all duration-300 ease-out;
+  }
+
+  .glassmorphism {
+    @apply backdrop-blur-xl bg-white/70 
+           border border-[#D1D1D6]/20
+           shadow-[0_8px_32px_0_rgba(0,46,136,0.1)];
+  }
+
+  .card-hover {
+    @apply hover:shadow-lg hover:scale-[1.02] 
+           transition-all duration-300;
+  }
+
+  .section-container {
+    @apply container mx-auto px-4 py-16 md:py-24;
   }
 }
 
-/* Instead of using @apply for these complex classes, we'll define them directly */
-.btn-primary {
-  background-color: hsl(var(--primary));
-  color: white;
-  padding: 0.75rem 2rem;
-  border-radius: 0.5rem;
-  font-weight: 600;
-  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-  transition: background-color 0.2s;
-  position: relative;
-  overflow: hidden;
-}
-
-.btn-primary:hover {
-  background-color: hsl(var(--primary) / 0.9);
-}
-
-.glassmorphism {
-  backdrop-filter: blur(16px);
-  background-color: rgba(255, 255, 255, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-}
-
-.section-padding {
-  padding-top: 6rem;
-  padding-bottom: 6rem;
-}
-
-@media (min-width: 768px) {
-  .section-padding {
-    padding-top: 8rem;
-    padding-bottom: 8rem;
+/* Animation Classes */
+@layer utilities {
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  .animate-gradient {
+    background-size: 300%;
+    animation: gradient 15s ease infinite;
   }
 }
 
-/* Custom animations */
 @keyframes float {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-20px); }
 }
 
-.floating {
-  animation: float 6s ease-in-out infinite;
+@keyframes gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
-/* Smooth scroll behavior */
-html.lenis {
-  height: auto;
+/* Improved Scroll Behavior */
+html {
+  scroll-behavior: smooth !important;
+  scroll-padding-top: 80px; /* Adjust based on your header height */
 }
 
-.lenis.lenis-smooth {
-  scroll-behavior: auto;
+/* Hide scrollbar for Chrome, Safari and Opera */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
 }
 
-.lenis.lenis-smooth [data-lenis-prevent] {
-  overscroll-behavior: contain;
+/* Hide scrollbar for IE, Edge and Firefox */
+.hide-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }
 
-.lenis.lenis-stopped {
-  overflow: hidden;
-}
-
-.lenis.lenis-scrolling iframe {
-  pointer-events: none;
+/* Smooth section transitions */
+section {
+  scroll-margin-top: 80px; /* Adjust based on your header height */
 }
