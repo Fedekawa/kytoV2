@@ -3,6 +3,9 @@
 import { motion } from "framer-motion"
 import { FileText, MessageSquare, Settings, ArrowRight } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from '@/components/ui/button'
+import { scrollToSection } from '@/lib/utils'
+
 
 const solutions = [
   {

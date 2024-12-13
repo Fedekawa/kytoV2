@@ -3,6 +3,9 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, ChevronRight, Building2, Building, FileText } from 'lucide-react';
+import { Button } from '@/components/ui/button'
+import { scrollToSection } from '@/lib/utils'
+
 
 const caseStudies = [
   {

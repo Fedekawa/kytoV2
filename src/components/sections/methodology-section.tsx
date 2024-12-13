@@ -3,6 +3,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Search, Settings, Code, TestTube2, Rocket, ChevronRight } from 'lucide-react';
+import { Button } from '@/components/ui/button'
+import { scrollToSection } from '@/lib/utils'
+
 
 const steps = [
   {

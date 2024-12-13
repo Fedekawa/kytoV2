@@ -7,9 +7,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 
 const navItems = [
-  { name: 'Solutions', href: '#solutions' },
-  { name: 'Case Studies', href: '#case-studies' },
-  { name: 'Methodology', href: '#methodology' },
+  { name: 'Solutions', href: '/#solutions' },
+  { name: 'Case Studies', href: '/#case-studies' },
+  { name: 'Methodology', href: '/#methodology' },
   { name: 'About', href: '/about' },
 ];
 
@@ -50,8 +50,8 @@ export function Header() {
             <Image
               src="/transparent.svg"
               alt="Kyto Logo"
-              width={120}
-              height={40}
+              width={240}
+              height={80}
               className="h-8 w-auto"
               priority
             />

@@ -1,8 +1,8 @@
 'use client';
 
-import React from 'react';
-import { motion } from 'framer-motion';
-import { ArrowRight, CheckCircle, MessageSquare, Clock, Zap } from 'lucide-react';
+import { Button } from "@/components/ui/button";
+import { useState } from 'react';
+import { ArrowRight, Zap, MessageSquare, Clock } from 'lucide-react';
 
 const benefits = [
   {
@@ -23,17 +23,23 @@ const benefits = [
 ];
 
 export function ContactSection() {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    // Add your form submission logic here
+    setTimeout(() => {
+      setIsSubmitting(false);
+    }, 2000);
+  };
+
   return (
     <section id="start" className="py-24 bg-[#002e88]">
       <div className="container mx-auto px-4">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           {/* Left Column - Form */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="bg-white rounded-2xl p-8 shadow-xl"
-          >
+          <div className="bg-white rounded-2xl p-8 shadow-xl">
             <h2 className="text-2xl md:text-3xl font-bold text-[#002e88] mb-2">
               Start Your AI Journey Today
             </h2>
@@ -41,7 +47,7 @@ export function ContactSection() {
               Get a free consultation and see how AI can transform your business
             </p>
 
-            <form className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-6">
               <div>
                 <label className="block text-sm font-medium text-[#002e88] mb-2">
                   Company Name
@@ -50,6 +56,7 @@ export function ContactSection() {
                   type="text"
                   className="w-full px-4 py-3 rounded-lg border border-[#D1D1D6] focus:border-[#00e5e5] focus:ring-2 focus:ring-[#00e5e5]/20 outline-none transition-colors"
                   placeholder="Enter your company name"
+                  required
                 />
               </div>
 
@@ -61,6 +68,7 @@ export function ContactSection() {
                   type="email"
                   className="w-full px-4 py-3 rounded-lg border border-[#D1D1D6] focus:border-[#00e5e5] focus:ring-2 focus:ring-[#00e5e5]/20 outline-none transition-colors"
                   placeholder="name@company.com"
+                  required
                 />
               </div>
 
@@ -70,6 +78,7 @@ export function ContactSection() {
                 </label>
                 <select
                   className="w-full px-4 py-3 rounded-lg border border-[#D1D1D6] focus:border-[#00e5e5] focus:ring-2 focus:ring-[#00e5e5]/20 outline-none transition-colors text-[#002e88]/70"
+                  required
                 >
                   <option value="">Select an option</option>
                   <option value="document-processing">Document Processing</option>
@@ -79,42 +88,31 @@ export function ContactSection() {
                 </select>
               </div>
 
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="w-full btn-primary text-lg group"
+              <Button 
+                type="submit"
+                className="w-full"
+                loading={isSubmitting}
+                disabled={isSubmitting}
+                icon={<ArrowRight className="w-5 h-5" />}
               >
                 Get Started
-                <ArrowRight className="inline-block ml-2 group-hover:translate-x-1 transition-transform" />
-              </motion.button>
+              </Button>
 
               <p className="text-sm text-[#002e88]/50 text-center">
                 No commitment required
               </p>
             </form>
-          </motion.div>
+          </div>
 
           {/* Right Column - Benefits */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="text-white"
-          >
+          <div className="text-white">
             <h3 className="text-2xl md:text-3xl font-bold mb-8">
               Why Choose Kyto?
             </h3>
 
             <div className="space-y-8">
-              {benefits.map((benefit, index) => (
-                <motion.div
-                  key={benefit.title}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.2 }}
-                  className="flex gap-4 items-start"
-                >
+              {benefits.map((benefit) => (
+                <div key={benefit.title} className="flex gap-4 items-start">
                   <div className="p-2 bg-white/10 rounded-lg">
                     <benefit.icon className="w-6 h-6" />
                   </div>
@@ -122,18 +120,12 @@ export function ContactSection() {
                     <h4 className="font-semibold mb-1">{benefit.title}</h4>
                     <p className="text-white/70">{benefit.description}</p>
                   </div>
-                </motion.div>
+                </div>
               ))}
             </div>
 
             {/* Testimonial */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.6 }}
-              className="mt-12 p-6 bg-white/10 rounded-xl backdrop-blur-sm"
-            >
+            <div className="mt-12 p-6 bg-white/10 rounded-xl backdrop-blur-sm">
               <p className="italic text-white/90 mb-4">
                 "Kyto helped us implement AI solutions in just days. The impact on our business has been remarkable."
               </p>
@@ -146,8 +138,8 @@ export function ContactSection() {
                   <p className="text-sm text-white/70">CEO at TechCorp</p>
                 </div>
               </div>
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
         </div>
       </div>
     </section>

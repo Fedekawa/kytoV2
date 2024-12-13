@@ -23,7 +23,6 @@ const navigation = {
   social: [
     { name: 'LinkedIn', href: '#', icon: Linkedin },
     { name: 'Twitter', href: '#', icon: Twitter },
-    { name: 'Facebook', href: '#', icon: Facebook }
   ]
 };
 
@@ -105,7 +104,7 @@ export function Footer() {
                   className="text-sm text-[#002e88]/70 hover:text-[#002e88] transition-colors flex items-center gap-2"
                 >
                   <Mail className="h-4 w-4" />
-                  contact@kyto.ai
+                  info@kyto.io
                 </a>
               </li>
               <li>
@@ -116,10 +115,6 @@ export function Footer() {
                   <Phone className="h-4 w-4" />
                   (123) 456-7890
                 </a>
-              </li>
-              <li className="text-sm text-[#002e88]/70 flex items-center gap-2">
-                <MapPin className="h-4 w-4" />
-                New York, NY
               </li>
             </ul>
 
