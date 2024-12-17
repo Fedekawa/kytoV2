@@ -22,7 +22,7 @@ const solutions = [
   },
   {
     icon: MessageSquare,
-    title: "AI Customer Service",
+    title: "AI Agents",
     description: "24/7 intelligent customer support",
     features: [
       "Custom-trained chatbots",
@@ -113,10 +113,13 @@ export function SolutionsSection() {
           <p className="text-lg text-[#002e88]/70 mb-6">
             Ready to transform your business with AI?
           </p>
-          <button className="btn-primary text-lg group">
+          <Button 
+            size="lg" 
+            icon={<ArrowRight className="h-5 w-5" />} 
+            onClick={() => scrollToSection('start')}
+          >
             Get Started Today
-            <ArrowRight className="inline-block ml-2 group-hover:translate-x-1 transition-transform" />
-          </button>
+          </Button>
         </div>
       </div>
     </section>

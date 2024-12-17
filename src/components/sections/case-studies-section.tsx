@@ -150,10 +150,13 @@ export function CaseStudiesSection() {
 
         {/* Bottom CTA */}
         <div className="text-center mt-16">
-          <button className="btn-primary text-lg group">
-            Transform Your Business Now
-            <ArrowRight className="inline-block ml-2 group-hover:translate-x-1 transition-transform" />
-          </button>
+          <Button 
+            size="lg" 
+            icon={<ArrowRight className="h-5 w-5" />} 
+            onClick={() => scrollToSection('start')}
+          >
+            Transform your business
+          </Button>
         </div>
       </div>
     </section>

@@ -139,54 +139,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Team Section */}
-      <section className="py-24 bg-white">
-        <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center max-w-3xl mx-auto mb-16"
-          >
-            <h2 className="text-3xl font-bold text-[#002e88] mb-4">Meet Our Team</h2>
-            <p className="text-[#002e88]/70">
-              The experts behind Kyto's AI solutions
-            </p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-2 gap-12 max-w-4xl mx-auto">
-            {teamMembers.map((member, index) => (
-              <motion.div
-                key={member.name}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.2 }}
-                className="bg-[#F2F2F7] rounded-xl p-8"
-              >
-                <div className="flex items-start gap-6">
-                  <div className="w-24 h-24 rounded-lg bg-[#002e88]/10 flex items-center justify-center">
-                    <Users className="w-12 h-12 text-[#002e88]" />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-bold text-[#002e88] mb-1">{member.name}</h3>
-                    <p className="text-[#00e5e5] font-medium mb-3">{member.role}</p>
-                    <p className="text-[#002e88]/70 mb-4">{member.description}</p>
-                    <a
-                      href={member.linkedin}
-                      className="inline-flex items-center text-[#002e88] hover:text-[#00e5e5] transition-colors"
-                    >
-                      Connect on LinkedIn
-                      <ArrowRight className="w-4 h-4 ml-1" />
-                    </a>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* CTA Section */}
       <section className="py-24 bg-[#002e88]">
         <div className="container mx-auto px-4 text-center">

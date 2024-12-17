@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Search, Settings, Code, TestTube2, Rocket, ChevronRight } from 'lucide-react';
+import { Search, Settings, Code, TestTube2, Rocket, ChevronRight, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button'
 import { scrollToSection } from '@/lib/utils'
 
@@ -150,9 +150,13 @@ export function MethodologySection() {
           <p className="text-lg text-[#002e88]/70 mb-6">
             Ready to start your AI transformation journey?
           </p>
-          <button className="btn-primary text-lg">
-            Get Started
-          </button>
+          <Button 
+            size="lg" 
+            icon={<ArrowRight className="h-5 w-5" />} 
+            onClick={() => scrollToSection('start')}
+          >
+            Start Now
+          </Button>
         </div>
       </div>
     </section>

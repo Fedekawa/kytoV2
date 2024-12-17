@@ -25,13 +25,38 @@ const benefits = [
 export function ContactSection() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
-    // Add your form submission logic here
-    setTimeout(() => {
+
+    // Collect form data
+    const formData = {
+      companyName: (e.currentTarget as HTMLFormElement).companyName.value,
+      workEmail: (e.currentTarget as HTMLFormElement).workEmail.value,
+      interest: (e.currentTarget as HTMLFormElement).interest.value,
+    };
+
+    // Send data to the API
+    try {
+      const response = await fetch('https://hook.us1.make.com/vw698v1xtrelfw2cjx4yxtm0396b0tmm', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      // Handle successful submission (optional)
+      console.log('Form submitted successfully');
+    } catch (error) {
+      console.error('Error submitting form:', error);
+    } finally {
       setIsSubmitting(false);
-    }, 2000);
+    }
   };
 
   return (
@@ -54,6 +79,7 @@ export function ContactSection() {
                 </label>
                 <input
                   type="text"
+                  name="companyName"
                   className="w-full px-4 py-3 rounded-lg border border-[#D1D1D6] focus:border-[#00e5e5] focus:ring-2 focus:ring-[#00e5e5]/20 outline-none transition-colors"
                   placeholder="Enter your company name"
                   required
@@ -66,6 +92,7 @@ export function ContactSection() {
                 </label>
                 <input
                   type="email"
+                  name="workEmail"
                   className="w-full px-4 py-3 rounded-lg border border-[#D1D1D6] focus:border-[#00e5e5] focus:ring-2 focus:ring-[#00e5e5]/20 outline-none transition-colors"
                   placeholder="name@company.com"
                   required
@@ -77,12 +104,13 @@ export function ContactSection() {
                   What interests you most?
                 </label>
                 <select
+                  name="interest"
                   className="w-full px-4 py-3 rounded-lg border border-[#D1D1D6] focus:border-[#00e5e5] focus:ring-2 focus:ring-[#00e5e5]/20 outline-none transition-colors text-[#002e88]/70"
                   required
                 >
                   <option value="">Select an option</option>
                   <option value="document-processing">Document Processing</option>
-                  <option value="customer-service">AI Customer Service</option>
+                  <option value="ai-agents">AI Agents</option>
                   <option value="process-automation">Process Automation</option>
                   <option value="other">Other</option>
                 </select>
@@ -134,8 +162,8 @@ export function ContactSection() {
                   JD
                 </div>
                 <div>
-                  <p className="font-semibold">John Doe</p>
-                  <p className="text-sm text-white/70">CEO at TechCorp</p>
+                  <p className="font-semibold">M.F</p>
+                  <p className="text-sm text-white/70">CEO at Grupo Verde</p>
                 </div>
               </div>
             </div>
