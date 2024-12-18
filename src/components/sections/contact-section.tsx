@@ -1,67 +1,72 @@
-'use client';
+'use client'
 
-import { Button } from "@/components/ui/button";
-import { useState } from 'react';
-import { ArrowRight, Zap, MessageSquare, Clock } from 'lucide-react';
+import { Button } from '@/components/ui/button'
+import { useState } from 'react'
+import { ArrowRight, Zap, MessageSquare, Clock } from 'lucide-react'
 
 const benefits = [
   {
     icon: Clock,
-    title: "Quick Response",
-    description: "Get a response within 24 hours"
+    title: 'Quick Response',
+    description: 'Get a response within 24 hours',
   },
   {
     icon: MessageSquare,
-    title: "Expert Consultation",
-    description: "Free consultation with AI specialists"
+    title: 'Expert Consultation',
+    description: 'Free consultation with AI specialists',
   },
   {
     icon: Zap,
-    title: "Rapid Implementation",
-    description: "Start seeing results in days"
-  }
-];
+    title: 'Rapid Implementation',
+    description: 'Start seeing results in days',
+  },
+]
 
 export function ContactSection() {
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsSubmitting(true);
+    e.preventDefault()
+    setIsSubmitting(true)
 
-    // Collect form data
-    const formData = {
-      name: (e.currentTarget as HTMLFormElement).name.value,
-      companyName: (e.currentTarget as HTMLFormElement).companyName.value,
-      workEmail: (e.currentTarget as HTMLFormElement).workEmail.value,
-      interest: (e.currentTarget as HTMLFormElement).interest.value,
-    };
+    // Get the form element and create FormData
+    const form = e.currentTarget
+    const formData = new FormData(form)
+    
+    // Convert FormData to object
+    const data = {
+      name: formData.get('name') as string,
+      companyName: formData.get('companyName') as string,
+      workEmail: formData.get('workEmail') as string,
+      interest: formData.get('interest') as string,
+    }
 
-    // Send data to the API
     try {
-      const response = await fetch('https://hook.us1.make.com/vw698v1xtrelfw2cjx4yxtm0396b0tmm', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
+      const response = await fetch(
+        'https://hook.us1.make.com/vw698v1xtrelfw2cjx4yxtm0396b0tmm',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        }
+      )
 
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        throw new Error('Network response was not ok')
       }
 
-      // Handle successful submission
-      console.log('Form submitted successfully');
-      alert('Thank you for your interest! We will contact you soon.');
-      (e.target as HTMLFormElement).reset();
+      console.log('Form submitted successfully')
+      alert('Thank you for your interest! We will contact you soon.')
+      form.reset()
     } catch (error) {
-      console.error('Error submitting form:', error);
-      alert('There was an error submitting the form. Please try again.');
+      console.error('Error submitting form:', error)
+      alert('There was an error submitting the form. Please try again.')
     } finally {
-      setIsSubmitting(false);
+      setIsSubmitting(false)
     }
-  };
+  }
 
   return (
     <section id="start" className="py-24 bg-[#002e88]">
@@ -138,7 +143,7 @@ export function ContactSection() {
               </div>
 
               {/* Submit Button */}
-              <Button 
+              <Button
                 type="submit"
                 className="w-full"
                 loading={isSubmitting}
@@ -193,5 +198,5 @@ export function ContactSection() {
         </div>
       </div>
     </section>
-  );
+  )
 }

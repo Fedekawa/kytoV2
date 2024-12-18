@@ -26,6 +26,7 @@ export function ScrollProvider({ children }: { children: React.ReactNode }) {
     window.addEventListener('scroll', handleScroll, { passive: true });
     
     return () => {
+      handleScroll.cancel(); // Clean up the debounced function
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
@@ -55,6 +56,8 @@ export function useScrollAnimation(options: {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
+    const currentRef = ref.current; // Store ref value
+    
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -71,13 +74,13 @@ export function useScrollAnimation(options: {
       }
     );
 
-    if (ref.current) {
-      observer.observe(ref.current);
+    if (currentRef) {
+      observer.observe(currentRef);
     }
 
     return () => {
-      if (ref.current) {
-        observer.unobserve(ref.current);
+      if (currentRef) { // Use stored ref value
+        observer.unobserve(currentRef);
       }
     };
   }, [threshold, once]);
