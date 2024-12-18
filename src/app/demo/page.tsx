@@ -1,14 +1,30 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowDownRight } from 'lucide-react';
+import { ArrowDownRight, Info } from 'lucide-react';
 import Script from 'next/script';
 
 export default function DemoPage() {
   const [password, setPassword] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const correctPassword = 'isarco2024';
+
+  // Cleanup function for Voiceflow widget
+  useEffect(() => {
+    return () => {
+      // Remove the widget when component unmounts
+      if (typeof window !== 'undefined') {
+        const voiceflow = (window as any).voiceflow;
+        if (voiceflow?.chat?.destroy) {
+          voiceflow.chat.destroy();
+        }
+        // Remove any leftover elements
+        const widgetElements = document.querySelectorAll('[id^="voiceflow"]');
+        widgetElements.forEach(element => element.remove());
+      }
+    };
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,6 +38,26 @@ export default function DemoPage() {
   return (
     <main className="min-h-screen pt-24 bg-gradient-to-b from-white to-[#F2F2F7]">
       <div className="container mx-auto px-4">
+        {/* Demo Information Banner - Always visible */}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="max-w-2xl mx-auto mb-12 bg-white/80 backdrop-blur-sm rounded-xl shadow-sm p-6"
+        >
+          <div className="flex items-start gap-4">
+            <Info className="w-6 h-6 text-[#002e88] flex-shrink-0 mt-1" />
+            <div>
+              <h2 className="text-lg font-semibold text-[#002e88] mb-2">Versión Demo</h2>
+              <div className="space-y-2 text-[#002e88]/70">
+                <p>Esta es una versión demostrativa del Asistente Virtual, utilizando un set de datos básico para mostrar sus capacidades principales.</p>
+                <p className="flex items-center gap-2">
+                  La implementación final está disponible para WhatsApp Business, ofreciendo una experiencia personalizada y adaptada a tus necesidades.
+                </p>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+
         {!isAuthenticated ? (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
