@@ -51,10 +51,13 @@ export function ContactSection() {
         throw new Error('Network response was not ok');
       }
 
-      // Handle successful submission (optional)
+      // Handle successful submission
       console.log('Form submitted successfully');
+      alert('Thank you for your interest! We will contact you soon.');
+      (e.target as HTMLFormElement).reset();
     } catch (error) {
       console.error('Error submitting form:', error);
+      alert('There was an error submitting the form. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -74,8 +77,8 @@ export function ContactSection() {
             </p>
 
             <form onSubmit={handleSubmit} className="space-y-6">
-
-            <div>
+              {/* Name Field */}
+              <div>
                 <label className="block text-sm font-medium text-[#002e88] mb-2">
                   Your Name
                 </label>
@@ -88,6 +91,7 @@ export function ContactSection() {
                 />
               </div>
 
+              {/* Company Name Field */}
               <div>
                 <label className="block text-sm font-medium text-[#002e88] mb-2">
                   Company Name
@@ -101,6 +105,7 @@ export function ContactSection() {
                 />
               </div>
 
+              {/* Email Field */}
               <div>
                 <label className="block text-sm font-medium text-[#002e88] mb-2">
                   Work Email
@@ -114,6 +119,7 @@ export function ContactSection() {
                 />
               </div>
 
+              {/* Interest Field */}
               <div>
                 <label className="block text-sm font-medium text-[#002e88] mb-2">
                   What interests you most?
@@ -131,6 +137,7 @@ export function ContactSection() {
                 </select>
               </div>
 
+              {/* Submit Button */}
               <Button 
                 type="submit"
                 className="w-full"
