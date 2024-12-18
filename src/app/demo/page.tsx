@@ -1,28 +1,14 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowDownRight, MessageSquare, Info } from 'lucide-react';
+import { ArrowDownRight } from 'lucide-react';
 import Script from 'next/script';
 
 export default function DemoPage() {
   const [password, setPassword] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const correctPassword = 'isarco2024';
-
-  useEffect(() => {
-    return () => {
-      // Safe check for voiceflow object
-      const voiceflow = (window as any).voiceflow;
-      if (voiceflow?.chat?.destroy) {
-        voiceflow.chat.destroy();
-      }
-
-      // Remove any leftover elements
-      const widgetElements = document.querySelectorAll('[id^="voiceflow"]');
-      widgetElements.forEach(element => element.remove());
-    };
-  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,27 +22,6 @@ export default function DemoPage() {
   return (
     <main className="min-h-screen pt-24 bg-gradient-to-b from-white to-[#F2F2F7]">
       <div className="container mx-auto px-4">
-        {/* Demo Information Banner */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="max-w-2xl mx-auto mb-12 bg-white/80 backdrop-blur-sm rounded-xl shadow-sm p-6"
-        >
-          <div className="flex items-start gap-4">
-            <Info className="w-6 h-6 text-[#002e88] flex-shrink-0 mt-1" />
-            <div>
-              <h2 className="text-lg font-semibold text-[#002e88] mb-2">Información del Demo</h2>
-              <div className="space-y-2 text-[#002e88]/70">
-                <p>Este es un demo de nuestro asistente AI, entrenado con un conjunto limitado de datos para fines demostrativos.</p>
-                <p className="flex items-center gap-2">
-                  <MessageSquare className="w-5 h-5" />
-                  El producto final puede ser implementado en WhatsApp, brindando una experiencia similar pero más integrada.
-                </p>
-              </div>
-            </div>
-          </div>
-        </motion.div>
-
         {!isAuthenticated ? (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
