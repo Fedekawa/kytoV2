@@ -31,6 +31,7 @@ export function ContactSection() {
 
     // Collect form data
     const formData = {
+      name: (e.currentTarget as HTMLFormElement).name.value,
       companyName: (e.currentTarget as HTMLFormElement).companyName.value,
       workEmail: (e.currentTarget as HTMLFormElement).workEmail.value,
       interest: (e.currentTarget as HTMLFormElement).interest.value,
@@ -73,6 +74,20 @@ export function ContactSection() {
             </p>
 
             <form onSubmit={handleSubmit} className="space-y-6">
+
+            <div>
+                <label className="block text-sm font-medium text-[#002e88] mb-2">
+                  Your Name
+                </label>
+                <input
+                  type="text"
+                  name="name"
+                  className="w-full px-4 py-3 rounded-lg border border-[#D1D1D6] focus:border-[#00e5e5] focus:ring-2 focus:ring-[#00e5e5]/20 outline-none transition-colors"
+                  placeholder="Enter your full name"
+                  required
+                />
+              </div>
+
               <div>
                 <label className="block text-sm font-medium text-[#002e88] mb-2">
                   Company Name
