@@ -12,9 +12,13 @@ export default function DemoPage() {
 
   useEffect(() => {
     return () => {
-      if (window.voiceflow && window.voiceflow.chat) {
-        window.voiceflow.chat.destroy();
+      // Safe check for voiceflow object
+      const voiceflow = (window as any).voiceflow;
+      if (voiceflow?.chat?.destroy) {
+        voiceflow.chat.destroy();
       }
+
+      // Remove any leftover elements
       const widgetElements = document.querySelectorAll('[id^="voiceflow"]');
       widgetElements.forEach(element => element.remove());
     };
