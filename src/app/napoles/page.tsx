@@ -1,8 +1,6 @@
 'use client'
 
-// Test change - delete me later
-
-// Types
+// Types remain the same...
 interface BotpressConfig {
   hideWidget: boolean
   disableAnimations: boolean
@@ -22,7 +20,6 @@ interface BotpressConfig {
 declare global {
   interface Window {
     botpress?: {
-      // Make botpress optional with ?
       open: () => void
       close: () => void
       toggle: () => void
@@ -43,17 +40,37 @@ export default function NapolesPage() {
   const [password, setPassword] = useState('')
   const [isAuthenticated, setIsAuthenticated] = useState(false)
 
+const handleCleanup = () => {
+    cleanupWidget();
+    // Add any additional cleanup logic here if needed
+  };
+
   const cleanupWidget = () => {
-    // Destroy the widget instance
-    if (window.botpressWebChat?.destroy) {
-      window.botpressWebChat.destroy()
+    try {
+      // Close the widget if it's open
+      if (window.botpress?.close) {
+        window.botpress.close()
+      }
+      
+      // Destroy the widget instance
+      if (window.botpressWebChat?.destroy) {
+        window.botpressWebChat.destroy()
+      }
+      
+      // Remove all BP elements
+      const widgetElements = document.querySelectorAll('[id^="bp-"]')
+      widgetElements.forEach((element) => element.remove())
+      
+      // Remove custom styles
+      const styleSheet = document.querySelector('style[data-bp-styles]')
+      if (styleSheet) styleSheet.remove()
+      
+      // Clean up global objects
+      delete window.botpress
+      delete window.botpressWebChat
+    } catch (error) {
+      console.error('Error cleaning up widget:', error)
     }
-    // Remove all BP elements
-    const widgetElements = document.querySelectorAll('[id^="bp-"]')
-    widgetElements.forEach((element) => element.remove())
-    // Remove custom styles
-    const styleSheet = document.querySelector('style[data-bp-styles]')
-    if (styleSheet) styleSheet.remove()
   }
 
   useEffect(() => {
@@ -111,23 +128,32 @@ export default function NapolesPage() {
         window.botpressWebChat.init(config)
       }
 
-      // Handle navigation events
-      const handleNavigation = () => {
-        cleanupWidget()
-      }
-
+      // Handle navigation events by deauthenticating
+      const handleNavigation = () => setIsAuthenticated(false)
+      
       window.addEventListener('popstate', handleNavigation)
       window.addEventListener('beforeunload', handleNavigation)
+      
+      // Handle clicks on external links
+      document.addEventListener('click', (e) => {
+        const target = e.target as HTMLElement
+        const link = target.closest('a')
+        if (link?.target === '_blank' || link?.href?.startsWith('http')) {
+          setIsAuthenticated(false)
+        }
+      })
 
       // Cleanup function
       return () => {
         cleanupWidget()
-        window.removeEventListener('popstate', handleNavigation)
-        window.removeEventListener('beforeunload', handleNavigation)
+        window.removeEventListener('popstate', handleCleanup)
+        window.removeEventListener('beforeunload', handleCleanup)
+        // No need to remove the click listener as the component will be unmounted
       }
     }
   }, [isAuthenticated])
 
+  // Rest of the component remains the same...
   const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (password === 'napoles2025') {
@@ -139,7 +165,7 @@ export default function NapolesPage() {
 
   const toggleWidget = () => {
     try {
-      const botpress = (window as any).botpress
+      const botpress = window.botpress
       if (botpress?.open) {
         botpress.open()
       }
@@ -270,7 +296,6 @@ export default function NapolesPage() {
               onError={(e) => {
                 console.error('Error loading Botpress widget:', e)
               }}
-              // In your Script dangerouslySetInnerHTML section, add the window.beforeunload handler:
               dangerouslySetInnerHTML={{
                 __html: `
     (function(d, t) {
@@ -285,13 +310,6 @@ export default function NapolesPage() {
         v2.async = true;
         s2.parentNode.insertBefore(v2, s2);
       }
-
-      // Add this part
-      window.addEventListener('beforeunload', function() {
-        if (window.botpressWebChat?.destroy) {
-          window.botpressWebChat.destroy();
-        }
-      });
     })(document, 'script');
   `,
               }}
