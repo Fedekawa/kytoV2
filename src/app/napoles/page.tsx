@@ -1,215 +1,210 @@
-'use client';
+'use client'
 
-declare global {
-  interface Window {
-    botpressWebChat: {
-      destroy?: () => void;
-    };
+// Test change - delete me later
+
+// Types
+interface BotpressConfig {
+  hideWidget: boolean
+  disableAnimations: boolean
+  showConversationsButton: boolean
+  enableTranscriptDownload: boolean
+  className: string
+  containerWidth: string
+  layoutWidth: string
+  showCloseButton: boolean
+  closeOnEscape: boolean
+  config: {
+    hideWidget: boolean
+    disableAnimations: boolean
   }
 }
 
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { ArrowDownRight, Info, MessageSquare, Bug, ExternalLink } from 'lucide-react';
-import Script from 'next/script';
+declare global {
+  interface Window {
+    botpress?: {
+      // Make botpress optional with ?
+      open: () => void
+      close: () => void
+      toggle: () => void
+    }
+    botpressWebChat?: {
+      destroy: () => void
+      init: (config: BotpressConfig) => void
+    }
+  }
+}
 
-// Curved arrow component for widget guidance
-const CurvedArrow = ({ isVisible }: { isVisible: boolean }) => (
-  <motion.div
-    initial={{ opacity: 0 }}
-    animate={{ opacity: isVisible ? 1 : 0 }}
-    style={{
-      position: 'fixed',
-      right: '20px',
-      bottom: '20px',
-      width: '200px',
-      height: '200px',
-      backgroundColor: isVisible ? 'rgba(0, 46, 136, 0.1)' : 'transparent',
-      zIndex: 9999,
-      pointerEvents: 'none'
-    }}
-  >
-    <svg
-      width="100%"
-      height="100%"
-      viewBox="0 0 200 200"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      style={{ border: isVisible ? '2px solid red' : 'none' }}
-    >
-      <motion.path
-        d="M50 50 L150 150"
-        stroke="#002e88"
-        strokeWidth="6"
-        strokeLinecap="round"
-        fill="none"
-        initial={{ pathLength: 0 }}
-        animate={{ pathLength: 1 }}
-        transition={{ duration: 1.5, ease: "easeInOut" }}
-      />
-      <motion.circle
-        cx="150"
-        cy="150"
-        r="12"
-        fill="#002e88"
-        initial={{ scale: 0 }}
-        animate={{ scale: [0, 1.2, 1] }}
-        transition={{ duration: 0.5, delay: 1 }}
-      />
-    </svg>
-  </motion.div>
-);
+import React, { useState, useEffect } from 'react'
+import { motion } from 'framer-motion'
+import { MessageSquare, Bug, ExternalLink, ArrowDownRight } from 'lucide-react'
+import Script from 'next/script'
 
 export default function NapolesPage() {
-  const [password, setPassword] = useState('');
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [showGuide, setShowGuide] = useState(true);
-  const [showArrow, setShowArrow] = useState(true);
+  const [password, setPassword] = useState('')
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
 
-  // Widget cleanup effect
+  const cleanupWidget = () => {
+    // Destroy the widget instance
+    if (window.botpressWebChat?.destroy) {
+      window.botpressWebChat.destroy()
+    }
+    // Remove all BP elements
+    const widgetElements = document.querySelectorAll('[id^="bp-"]')
+    widgetElements.forEach((element) => element.remove())
+    // Remove custom styles
+    const styleSheet = document.querySelector('style[data-bp-styles]')
+    if (styleSheet) styleSheet.remove()
+  }
+
   useEffect(() => {
     if (isAuthenticated) {
-      // Add custom styles for the widget with better integration
-      const styleSheet = document.createElement("style");
-      styleSheet.setAttribute('data-bp-styles', '');
+      // Add centered widget styles
+      const styleSheet = document.createElement('style')
+      styleSheet.setAttribute('data-bp-styles', '')
       styleSheet.textContent = `
         .bp-widget-web {
           background: transparent !important;
-          backdrop-filter: blur(8px);
         }
-
         .bp-widget-web button {
-          background: rgba(0, 46, 136, 0.9) !important;
-          border-radius: 50% !important;
-          box-shadow: 0 4px 12px rgba(0, 46, 136, 0.15) !important;
-          transition: all 0.3s ease !important;
+          display: none !important;
         }
-
-        .bp-widget-web button:hover {
-          transform: scale(1.05);
-          box-shadow: 0 6px 16px rgba(0, 46, 136, 0.2) !important;
-        }
-
         #bp-web-widget-container {
-          background: transparent !important;
+          position: fixed !important;
+          top: 50% !important;
+          left: 50% !important;
+          transform: translate(-50%, -50%) !important;
+          width: 90vw !important;
+          max-width: 500px !important;
+          height: 80vh !important;
+          max-height: 600px !important;
+          margin: 0 !important;
+          background: white !important;
+          border-radius: 16px !important;
+          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1) !important;
+          z-index: 100 !important;
         }
-
-        @media (max-width: 768px) {
-          #bp-web-widget-container {
-            width: 100% !important;
-            height: 100% !important;
-            max-height: 100% !important;
-            margin: 0 !important;
-            border-radius: 0 !important;
-          }
+        #bp-web-widget {
+          border-radius: 16px !important;
+          overflow: hidden !important;
+          height: 100% !important;
         }
-      `;
-      document.head.appendChild(styleSheet);
+      `
+      document.head.appendChild(styleSheet)
 
-      // Hide guide when chat is opened
-      const observer = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-          if (mutation.target instanceof Element) {
-            const target = mutation.target;
-            if (target.classList.contains('bp-widget-opened')) {
-              setShowGuide(false);
-            }
-          }
-        });
-      });
-
-      const chatElement = document.getElementById('bp-web-widget-container');
-      if (chatElement) {
-        observer.observe(chatElement, { attributes: true });
+      // Initialize widget in closed state
+      if (window.botpressWebChat?.init) {
+        const config: BotpressConfig = {
+          hideWidget: true,
+          disableAnimations: false,
+          showConversationsButton: false,
+          enableTranscriptDownload: false,
+          className: 'bp-widget-web',
+          containerWidth: '100%',
+          layoutWidth: '100%',
+          showCloseButton: true,
+          closeOnEscape: true,
+          config: {
+            hideWidget: true,
+            disableAnimations: false,
+          },
+        }
+        window.botpressWebChat.init(config)
       }
+
+      // Handle navigation events
+      const handleNavigation = () => {
+        cleanupWidget()
+      }
+
+      window.addEventListener('popstate', handleNavigation)
+      window.addEventListener('beforeunload', handleNavigation)
 
       // Cleanup function
       return () => {
-        observer.disconnect();
-        if (typeof window !== 'undefined') {
-          // Remove Botpress widget
-          if (window.botpressWebChat?.destroy) {
-            window.botpressWebChat.destroy();
-          }
-          // Remove all related elements
-          const widgetElements = document.querySelectorAll('[id^="bp-"]');
-          widgetElements.forEach(element => element.remove());
-          // Remove custom styles
-          const styleSheet = document.querySelector('style[data-bp-styles]');
-          if (styleSheet) styleSheet.remove();
-        }
-      };
+        cleanupWidget()
+        window.removeEventListener('popstate', handleNavigation)
+        window.removeEventListener('beforeunload', handleNavigation)
+      }
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated])
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
     if (password === 'napoles2025') {
-      setIsAuthenticated(true);
+      setIsAuthenticated(true)
     } else {
-      alert('Contraseña incorrecta');
+      alert('Contraseña incorrecta')
     }
-  };
+  }
+
+  const toggleWidget = () => {
+    try {
+      const botpress = (window as any).botpress
+      if (botpress?.open) {
+        botpress.open()
+      }
+    } catch (error) {
+      console.error('Error toggling widget:', error)
+    }
+  }
 
   return (
-    <main className="min-h-screen pt-16 md:pt-24 bg-gradient-to-b from-white to-gray-100">
+    <main className="min-h-screen bg-gradient-to-b from-white to-gray-100 pt-16 md:pt-24">
       <div className="container mx-auto px-4">
-        {/* Enhanced Demo Information Banner */}
+        {/* Info Banner */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="max-w-4xl mx-auto mb-8 md:mb-12"
+          className="mx-auto mb-8 max-w-4xl md:mb-12"
         >
-          <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow p-6 md:p-8">
-            <div className="flex items-start gap-4">
-              <Info className="w-8 h-8 text-blue-900 flex-shrink-0 mt-1" />
-              <div className="space-y-6 flex-1">
-                <div>
-                  <h2 className="text-2xl font-bold text-blue-900 mb-4">Versión Demo Interactiva</h2>
-                  <p className="text-blue-900/70 text-lg mb-4">
-                    ¡Bienvenido! Este es nuestro Asistente Virtual de demostración, entrenado con la base de conocimiento de Hacienda Napoles.
+          <div className="rounded-xl bg-white/80 p-6 shadow-lg backdrop-blur-sm md:p-8">
+            <h1 className="mb-4 text-2xl font-bold text-blue-900">
+              Versión Demo Interactiva
+            </h1>
+            <p className="mb-8 text-lg text-blue-900/70">
+              ¡Bienvenido! Este es nuestro Asistente Virtual de demostración,
+              entrenado con la base de conocimiento de Hacienda Napoles.
+            </p>
+
+            <div className="grid gap-6 md:grid-cols-2">
+              <motion.a
+                href="https://grupai.notion.site/16c81326dd2e8109b91ac1b91c35dba2?pvs=105"
+                target="_blank"
+                rel="noopener noreferrer"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="group flex items-center gap-3 rounded-lg bg-blue-50 p-4 transition-all hover:bg-blue-100"
+              >
+                <MessageSquare className="h-6 w-6 text-blue-900" />
+                <div className="flex-1">
+                  <h3 className="font-semibold text-blue-900">
+                    Dejar Comentario
+                  </h3>
+                  <p className="text-sm text-blue-900/70">
+                    Comparte tu experiencia y sugerencias para mejorar el
+                    asistente
                   </p>
                 </div>
+                <ExternalLink className="h-4 w-4 text-blue-900/50 group-hover:text-blue-900" />
+              </motion.a>
 
-                {/* Enhanced Feedback Section */}
-                <div className="grid md:grid-cols-2 gap-6">
-                  <motion.a
-                    href="https://grupai.notion.site/16c81326dd2e8109b91ac1b91c35dba2?pvs=105"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="block p-4 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors group"
-                  >
-                    <div className="flex items-center gap-3 mb-2">
-                      <MessageSquare className="w-6 h-6 text-blue-900" />
-                      <h3 className="font-semibold text-blue-900">Dejar Comentario</h3>
-                      <ExternalLink className="w-4 h-4 text-blue-900/50 group-hover:text-blue-900 ml-auto" />
-                    </div>
-                    <p className="text-blue-900/70 text-sm">
-                      Comparte tu experiencia y sugerencias para mejorar el asistente
-                    </p>
-                  </motion.a>
-
-                  <motion.a
-                    href="https://grupai.notion.site/16c81326dd2e8109b91ac1b91c35dba2?pvs=105"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="block p-4 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors group"
-                  >
-                    <div className="flex items-center gap-3 mb-2">
-                      <Bug className="w-6 h-6 text-blue-900" />
-                      <h3 className="font-semibold text-blue-900">Reportar Bug</h3>
-                      <ExternalLink className="w-4 h-4 text-blue-900/50 group-hover:text-blue-900 ml-auto" />
-                    </div>
-                    <p className="text-blue-900/70 text-sm">
-                      Ayúdanos a identificar y corregir problemas técnicos
-                    </p>
-                  </motion.a>
+              <motion.a
+                href="https://grupai.notion.site/16c81326dd2e8109b91ac1b91c35dba2?pvs=105"
+                target="_blank"
+                rel="noopener noreferrer"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="group flex items-center gap-3 rounded-lg bg-blue-50 p-4 transition-all hover:bg-blue-100"
+              >
+                <Bug className="h-6 w-6 text-blue-900" />
+                <div className="flex-1">
+                  <h3 className="font-semibold text-blue-900">Reportar Bugs</h3>
+                  <p className="text-sm text-blue-900/70">
+                    Ayúdanos a identificar y corregir problemas técnicos
+                  </p>
                 </div>
-              </div>
+                <ExternalLink className="h-4 w-4 text-blue-900/50 group-hover:text-blue-900" />
+              </motion.a>
             </div>
           </div>
         </motion.div>
@@ -218,20 +213,19 @@ export default function NapolesPage() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="max-w-md mx-auto px-2 md:px-0"
+            className="mx-auto max-w-md px-4"
           >
-            <form 
-              onSubmit={handleSubmit} 
-              className="bg-white rounded-xl shadow-lg p-6 md:p-8 backdrop-blur-sm"
+            <form
+              onSubmit={handleLogin}
+              className="rounded-xl bg-white p-6 shadow-lg md:p-8"
             >
-              <h2 className="text-2xl font-bold text-blue-900 mb-6 text-center">
+              <h2 className="mb-6 text-center text-2xl font-bold text-blue-900">
                 Acceso Demo
               </h2>
               <div className="mb-6">
-                <label 
-                  htmlFor="password" 
-                  className="block text-blue-900/70 text-sm font-medium mb-2"
+                <label
+                  htmlFor="password"
+                  className="mb-2 block text-sm font-medium text-blue-900/70"
                 >
                   Contraseña
                 </label>
@@ -240,7 +234,7 @@ export default function NapolesPage() {
                   id="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-900 focus:border-transparent outline-none"
+                  className="w-full rounded-lg border px-4 py-3 outline-none focus:border-transparent focus:ring-2 focus:ring-blue-900"
                   placeholder="Ingresa la contraseña"
                 />
               </div>
@@ -248,83 +242,63 @@ export default function NapolesPage() {
                 type="submit"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="w-full bg-blue-900 text-white py-3 px-4 rounded-lg hover:bg-blue-800 transition-colors font-medium"
+                className="w-full rounded-lg bg-blue-900 px-4 py-3 font-medium text-white transition-colors hover:bg-blue-800"
               >
                 Acceder
               </motion.button>
             </form>
           </motion.div>
         ) : (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="text-center w-full max-w-xl mx-auto"
+            className="text-center"
           >
             <motion.button
-              onClick={() => {
-                const chatElement = document.querySelector('.bp-widget-web') as HTMLElement;
-                if (chatElement) {
-                  chatElement.click();
-                }
-              }}
-              className="inline-flex items-center gap-3 text-3xl font-bold text-blue-900 mb-8 p-6 bg-white/50 hover:bg-white/80 backdrop-blur-sm rounded-xl shadow-sm transition-colors"
+              onClick={toggleWidget}
+              className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-blue-900 shadow-lg transition-all hover:bg-blue-50"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.98 }}
-              transition={{ type: "spring", stiffness: 300 }}
             >
-              <span>Prueba tu agente</span>
-              <ArrowDownRight className="w-8 h-8" />
+              <span className="font-semibold">Prueba tu agente</span>
+              <ArrowDownRight className="h-5 w-5" />
             </motion.button>
-            
-            {/* Napoles Widget */}
-            {isAuthenticated && (
-              <Script
-                id="botpress-widget"
-                strategy="afterInteractive"
-                onError={(e) => {
-                  console.error('Error loading Botpress widget:', e);
-                }}
-                dangerouslySetInnerHTML={{
-                  __html: `
-                    (function(d, t) {
-                      // Load initial inject.js script
-                      var v1 = d.createElement(t), s1 = d.getElementsByTagName(t)[0];
-                      v1.src = "https://cdn.botpress.cloud/webchat/v2/inject.js";
-                      v1.async = true;
-                      s1.parentNode.insertBefore(v1, s1);
 
-                      // Load widget configuration script
-                      v1.onload = function() {
-                        var v2 = d.createElement(t), s2 = d.getElementsByTagName(t)[0];
-                        v2.src = "https://files.bpcontent.cloud/2024/12/09/17/20241209173227-IF3O9RW2.js";
-                        v2.async = true;
-                        s2.parentNode.insertBefore(v2, s2);
-                      }
+            <Script
+              id="botpress-widget"
+              strategy="afterInteractive"
+              onError={(e) => {
+                console.error('Error loading Botpress widget:', e)
+              }}
+              // In your Script dangerouslySetInnerHTML section, add the window.beforeunload handler:
+              dangerouslySetInnerHTML={{
+                __html: `
+    (function(d, t) {
+      var v1 = d.createElement(t), s1 = d.getElementsByTagName(t)[0];
+      v1.src = "https://cdn.botpress.cloud/webchat/v2/inject.js";
+      v1.async = true;
+      s1.parentNode.insertBefore(v1, s1);
 
-                      // Cleanup function
-                      window.addEventListener('beforeunload', function() {
-                        if (window.botpressWebChat) {
-                          window.botpressWebChat.destroy();
-                        }
-                      });
-                    })(document, 'script');
-                  `
-                }}
-              />
-            )}
+      v1.onload = function() {
+        var v2 = d.createElement(t), s2 = d.getElementsByTagName(t)[0];
+        v2.src = "https://files.bpcontent.cloud/2024/12/09/17/20241209173227-IF3O9RW2.js";
+        v2.async = true;
+        s2.parentNode.insertBefore(v2, s2);
+      }
+
+      // Add this part
+      window.addEventListener('beforeunload', function() {
+        if (window.botpressWebChat?.destroy) {
+          window.botpressWebChat.destroy();
+        }
+      });
+    })(document, 'script');
+  `,
+              }}
+            />
           </motion.div>
         )}
       </div>
-
-      {/* Arrow Guide */}
-      {isAuthenticated && <CurvedArrow isVisible={showArrow} />}
-
-      {/* Background decoration */}
-      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 left-0 w-72 h-72 bg-blue-900/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-0 w-72 h-72 bg-blue-900/5 rounded-full blur-3xl" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-900/3 rounded-full blur-3xl" />
-      </div>
     </main>
-  );
+  )
 }
