@@ -1,176 +1,24 @@
+// src\app\napoles\page.tsx
+
 'use client'
 
-// Types remain the same...
-interface BotpressConfig {
-  hideWidget: boolean
-  disableAnimations: boolean
-  showConversationsButton: boolean
-  enableTranscriptDownload: boolean
-  className: string
-  containerWidth: string
-  layoutWidth: string
-  showCloseButton: boolean
-  closeOnEscape: boolean
-  config: {
-    hideWidget: boolean
-    disableAnimations: boolean
-  }
-}
+import React, { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { MessageSquare, Bug, ExternalLink, ArrowDownRight, X } from 'lucide-react'
 
-declare global {
-  interface Window {
-    botpress?: {
-      open: () => void
-      close: () => void
-      toggle: () => void
-    }
-    botpressWebChat?: {
-      destroy: () => void
-      init: (config: BotpressConfig) => void
-    }
-  }
-}
-
-import React, { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
-import { MessageSquare, Bug, ExternalLink, ArrowDownRight } from 'lucide-react'
-import Script from 'next/script'
+const BOTPRESS_URL = 'https://cdn.botpress.cloud/webchat/v2.3/shareable.html?configUrl=https://files.bpcontent.cloud/2024/12/09/17/20241209173228-ORQYV0CG.json'
 
 export default function NapolesPage() {
   const [password, setPassword] = useState('')
   const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
-const handleCleanup = () => {
-    cleanupWidget();
-    // Add any additional cleanup logic here if needed
-  };
-
-  const cleanupWidget = () => {
-    try {
-      // Close the widget if it's open
-      if (window.botpress?.close) {
-        window.botpress.close()
-      }
-      
-      // Destroy the widget instance
-      if (window.botpressWebChat?.destroy) {
-        window.botpressWebChat.destroy()
-      }
-      
-      // Remove all BP elements
-      const widgetElements = document.querySelectorAll('[id^="bp-"]')
-      widgetElements.forEach((element) => element.remove())
-      
-      // Remove custom styles
-      const styleSheet = document.querySelector('style[data-bp-styles]')
-      if (styleSheet) styleSheet.remove()
-      
-      // Clean up global objects
-      delete window.botpress
-      delete window.botpressWebChat
-    } catch (error) {
-      console.error('Error cleaning up widget:', error)
-    }
-  }
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      // Add centered widget styles
-      const styleSheet = document.createElement('style')
-      styleSheet.setAttribute('data-bp-styles', '')
-      styleSheet.textContent = `
-        .bp-widget-web {
-          background: transparent !important;
-        }
-        .bp-widget-web button {
-          display: none !important;
-        }
-        #bp-web-widget-container {
-          position: fixed !important;
-          top: 50% !important;
-          left: 50% !important;
-          transform: translate(-50%, -50%) !important;
-          width: 90vw !important;
-          max-width: 500px !important;
-          height: 80vh !important;
-          max-height: 600px !important;
-          margin: 0 !important;
-          background: white !important;
-          border-radius: 16px !important;
-          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1) !important;
-          z-index: 100 !important;
-        }
-        #bp-web-widget {
-          border-radius: 16px !important;
-          overflow: hidden !important;
-          height: 100% !important;
-        }
-      `
-      document.head.appendChild(styleSheet)
-
-      // Initialize widget in closed state
-      if (window.botpressWebChat?.init) {
-        const config: BotpressConfig = {
-          hideWidget: true,
-          disableAnimations: false,
-          showConversationsButton: false,
-          enableTranscriptDownload: false,
-          className: 'bp-widget-web',
-          containerWidth: '100%',
-          layoutWidth: '100%',
-          showCloseButton: true,
-          closeOnEscape: true,
-          config: {
-            hideWidget: true,
-            disableAnimations: false,
-          },
-        }
-        window.botpressWebChat.init(config)
-      }
-
-      // Handle navigation events by deauthenticating
-      const handleNavigation = () => setIsAuthenticated(false)
-      
-      window.addEventListener('popstate', handleNavigation)
-      window.addEventListener('beforeunload', handleNavigation)
-      
-      // Handle clicks on external links
-      document.addEventListener('click', (e) => {
-        const target = e.target as HTMLElement
-        const link = target.closest('a')
-        if (link?.target === '_blank' || link?.href?.startsWith('http')) {
-          setIsAuthenticated(false)
-        }
-      })
-
-      // Cleanup function
-      return () => {
-        cleanupWidget()
-        window.removeEventListener('popstate', handleCleanup)
-        window.removeEventListener('beforeunload', handleCleanup)
-        // No need to remove the click listener as the component will be unmounted
-      }
-    }
-  }, [isAuthenticated])
-
-  // Rest of the component remains the same...
   const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (password === 'napoles2025') {
       setIsAuthenticated(true)
     } else {
       alert('Contraseña incorrecta')
-    }
-  }
-
-  const toggleWidget = () => {
-    try {
-      const botpress = window.botpress
-      if (botpress?.open) {
-        botpress.open()
-      }
-    } catch (error) {
-      console.error('Error toggling widget:', error)
     }
   }
 
@@ -281,7 +129,7 @@ const handleCleanup = () => {
             className="text-center"
           >
             <motion.button
-              onClick={toggleWidget}
+              onClick={() => setIsModalOpen(true)}
               className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-blue-900 shadow-lg transition-all hover:bg-blue-50"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.98 }}
@@ -289,33 +137,41 @@ const handleCleanup = () => {
               <span className="font-semibold">Prueba tu agente</span>
               <ArrowDownRight className="h-5 w-5" />
             </motion.button>
-
-            <Script
-              id="botpress-widget"
-              strategy="afterInteractive"
-              onError={(e) => {
-                console.error('Error loading Botpress widget:', e)
-              }}
-              dangerouslySetInnerHTML={{
-                __html: `
-    (function(d, t) {
-      var v1 = d.createElement(t), s1 = d.getElementsByTagName(t)[0];
-      v1.src = "https://cdn.botpress.cloud/webchat/v2/inject.js";
-      v1.async = true;
-      s1.parentNode.insertBefore(v1, s1);
-
-      v1.onload = function() {
-        var v2 = d.createElement(t), s2 = d.getElementsByTagName(t)[0];
-        v2.src = "https://files.bpcontent.cloud/2024/12/09/17/20241209173227-IF3O9RW2.js";
-        v2.async = true;
-        s2.parentNode.insertBefore(v2, s2);
-      }
-    })(document, 'script');
-  `,
-              }}
-            />
           </motion.div>
         )}
+
+        {/* Modal with iframe */}
+        <AnimatePresence>
+          {isModalOpen && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+              onClick={() => setIsModalOpen(false)}
+            >
+              <motion.div
+                initial={{ scale: 0.95 }}
+                animate={{ scale: 1 }}
+                exit={{ scale: 0.95 }}
+                onClick={(e) => e.stopPropagation()}
+                className="relative h-[80vh] w-full max-w-2xl rounded-2xl bg-white shadow-xl"
+              >
+                <button
+                  onClick={() => setIsModalOpen(false)}
+                  className="absolute -right-3 -top-3 rounded-full bg-white p-2 shadow-lg"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+                <iframe
+                  src={BOTPRESS_URL}
+                  className="h-full w-full rounded-2xl"
+                  allow="microphone"
+                />
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </main>
   )
