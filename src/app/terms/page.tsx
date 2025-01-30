@@ -254,7 +254,6 @@ export default function TermsPage() {
               <p className="text-blue-900/70">If you have any questions about these Terms, please contact us at:</p>
               <ul className="list-none text-blue-900/70 space-y-2 mt-2">
                 <li><strong>Email:</strong> info@kyto.io</li>
-                <li><strong>Address:</strong> 111 NE 1st St, 8th Floor, Suite #88118, Miami, Florida 33132, USA</li>
               </ul>
 
               <p className="text-blue-900/70 mt-8 italic">
