@@ -13,7 +13,7 @@ export default function PrivacyPage() {
         >
           <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow p-6 md:p-8">
             <h1 className="text-4xl font-bold text-blue-900 mb-2">Kyto Privacy Policy</h1>
-            <p className="text-blue-900/70 mb-8">Effective Date: January 17, 2025</p>
+            <p className="text-blue-900/70 mb-8">Updated: January 30, 2025</p>
             
             <div className="prose prose-blue max-w-none">
               <p className="text-blue-900/70">
@@ -25,8 +25,9 @@ export default function PrivacyPage() {
 
               <h2 className="text-2xl font-bold text-blue-900 mt-8 mb-4">Table of Contents</h2>
               <ul className="list-decimal list-inside text-blue-900/70 space-y-2">
-                <li>How We Collect Personal Data</li>
+              <li>How We Collect Personal Data</li>
                 <li>Types of Personal Data We Process</li>
+                <li>WhatsApp-Specific Data Processing</li>
                 <li>How We Use Personal Data</li>
                 <li>How We Share Personal Data</li>
                 <li>Your Data Protection Rights</li>
@@ -38,17 +39,20 @@ export default function PrivacyPage() {
                 <li>Data Breach Notifications</li>
                 <li>Legal Basis for Processing (EEA, UK)</li>
                 <li>California Privacy Rights</li>
+                <li>WhatsApp Business Solution Provider Terms</li>
                 <li>Updates to This Privacy Policy</li>
                 <li>How to Contact Us</li>
               </ul>
+
 
               {/* Section 1 */}
               <h2 className="text-2xl font-bold text-blue-900 mt-8 mb-4">1. How We Collect Personal Data</h2>
               <p className="text-blue-900/70 mb-4">We collect personal data in the following ways:</p>
               <ul className="list-disc list-inside text-blue-900/70 space-y-2 ml-4">
                 <li>Directly From You: When you register, complete forms, communicate with us, or use our Services.</li>
-                <li>Automatically: When you interact with our Website or Mobile Apps, including through cookies and similar technologies.</li>
-                <li>From Third Parties: Such as social media platforms, payment processors, or data analytics providers.</li>
+                <li>Automatically: When you interact with our Website, Mobile Apps, or WhatsApp Business integration.</li>
+                <li>From Third Parties: Such as WhatsApp Business Platform, social media platforms, payment processors, or data analytics providers.</li>
+                <li>Through Business Customers: When businesses use our platform to communicate with their customers via WhatsApp.</li>
               </ul>
 
               {/* Section 2 */}
@@ -56,44 +60,79 @@ export default function PrivacyPage() {
               <p className="text-blue-900/70 mb-4">We process the following types of personal data:</p>
               <ul className="list-disc list-inside text-blue-900/70 space-y-2 ml-4">
                 <li>Account Information: Name, email address, phone number, password, and preferences.</li>
+                <li>Business Account Information: Business name, registration details, WhatsApp Business account information.</li>
                 <li>Payment Information: Billing details, credit card numbers (encrypted), and transaction history.</li>
                 <li>Usage Data: IP addresses, browser type, operating system, device identifiers, and activity logs.</li>
                 <li>Customer Content: Data you upload or share while using our Services.</li>
-                <li>Marketing Data: Data related to your preferences, subscriptions, and interactions with our marketing communications.</li>
+                <li>WhatsApp Communication Data: Message templates, chat histories, customer responses.</li>
+                <li>Marketing Data: Data related to your preferences, subscriptions, and interactions.</li>
               </ul>
 
-              {/* Section 3 */}
-              <h2 className="text-2xl font-bold text-blue-900 mt-8 mb-4">3. How We Use Personal Data</h2>
+              {/* New Section 3 - WhatsApp Specific */}
+              <h2 className="text-2xl font-bold text-blue-900 mt-8 mb-4">3. WhatsApp-Specific Data Processing</h2>
+              <p className="text-blue-900/70 mb-4">As a WhatsApp Business Solution Provider, we:</p>
+              <ul className="list-disc list-inside text-blue-900/70 space-y-2 ml-4">
+                <li>Act as a data processor for WhatsApp user data when providing services to businesses</li>
+                <li>Process data in accordance with the WhatsApp Business Data Processing Terms</li>
+                <li>Maintain strict data segregation between different business customers</li>
+                <li>Handle message templates according to WhatsApp's guidelines</li>
+                <li>Enforce 24-hour messaging window compliance</li>
+                <li>Process opt-in/opt-out requests for WhatsApp communications</li>
+              </ul>
+
+              <h3 className="text-xl font-bold text-blue-900 mt-6 mb-3">3.1 WhatsApp Customer Data</h3>
+              <p className="text-blue-900/70 mb-4">We process the following WhatsApp-related data:</p>
+              <ul className="list-disc list-inside text-blue-900/70 space-y-2 ml-4">
+                <li>WhatsApp user phone numbers (as provided by businesses)</li>
+                <li>Message content and interaction history</li>
+                <li>Order and transaction information</li>
+                <li>Customer service chat histories</li>
+                <li>Message template performance data</li>
+                <li>Opt-in/opt-out records</li>
+              </ul>
+
+              <h3 className="text-xl font-bold text-blue-900 mt-6 mb-3">3.2 WhatsApp Business Features</h3>
+              <p className="text-blue-900/70 mb-4">Our processing includes:</p>
+              <ul className="list-disc list-inside text-blue-900/70 space-y-2 ml-4">
+                <li>Managing message templates</li>
+                <li>Processing automated responses</li>
+                <li>Handling opt-in/opt-out requests</li>
+                <li>Maintaining messaging compliance</li>
+                <li>Managing product catalogs</li>
+                <li>Processing orders through WhatsApp</li>
+              </ul>
+
+              {/* Section 4 */}
+              <h2 className="text-2xl font-bold text-blue-900 mt-8 mb-4">4. How We Use Personal Data</h2>
               <p className="text-blue-900/70 mb-4">We use your data for the following purposes:</p>
               <ul className="list-disc list-inside text-blue-900/70 space-y-2 ml-4">
                 <li>Service Delivery: To provide and improve our Services, manage accounts, and process transactions.</li>
+                <li>WhatsApp Integration: To enable business-customer communication through WhatsApp.</li>
                 <li>Communication: To respond to inquiries, send updates, and notify you of service changes.</li>
                 <li>Marketing: To send promotional materials, offers, and surveys (with opt-out options).</li>
                 <li>Compliance: To meet legal obligations, enforce our policies, and ensure security.</li>
                 <li>Personalization: To tailor user experiences and provide relevant recommendations.</li>
               </ul>
 
-              {/* Section 4 */}
-              <h2 className="text-2xl font-bold text-blue-900 mt-8 mb-4">4. How We Share Personal Data</h2>
+              {/* Section 5 */}
+              <h2 className="text-2xl font-bold text-blue-900 mt-8 mb-4">5. How We Share Personal Data</h2>
               <p className="text-blue-900/70 mb-4">We share personal data with:</p>
               <ul className="list-disc list-inside text-blue-900/70 space-y-2 ml-4">
                 <li>Service Providers: Third parties who assist with payment processing, analytics, customer support, and cloud storage.</li>
-                <li>Third-Party Applications: We may share data with third-party applications, including Large Language Models (LLMs), to enhance service functionality, provide advanced insights, or improve user experiences.</li>
-                <li>Legal Authorities: When required to comply with legal obligations or protect our rights.</li>
+                <li>WhatsApp: As required by the WhatsApp Business Solution Provider terms.</li>
+                <li>Third-Party Applications: Including Large Language Models (LLMs), subject to strict confidentiality.</li>
+                <li>Legal Authorities: When required to comply with legal obligations.</li>
                 <li>Business Transfers: In case of mergers, acquisitions, or asset sales.</li>
-                <li>Partners: With your consent, for co-marketing initiatives or event participation.</li>
+                <li>Partners: With your consent, for co-marketing initiatives.</li>
               </ul>
 
-              {/* Section 5 */}
-              <h2 className="text-2xl font-bold text-blue-900 mt-8 mb-4">5. Your Data Protection Rights</h2>
-              <p className="text-blue-900/70 mb-4">You have the following rights:</p>
+              <h3 className="text-xl font-bold text-blue-900 mt-6 mb-3">5.1 WhatsApp Data Sharing Restrictions</h3>
+              <p className="text-blue-900/70 mb-4">We maintain strict controls on WhatsApp data:</p>
               <ul className="list-disc list-inside text-blue-900/70 space-y-2 ml-4">
-                <li>Access: Request a copy of your personal data.</li>
-                <li>Correction: Update inaccurate or incomplete data.</li>
-                <li>Deletion: Request the removal of your data.</li>
-                <li>Restriction: Limit the processing of your data in certain circumstances.</li>
-                <li>Portability: Receive your data in a structured, machine-readable format.</li>
-                <li>Objection: Opt-out of direct marketing or certain processing activities.</li>
+                <li>No sharing of customer chat data between different businesses</li>
+                <li>No use of WhatsApp data for purposes beyond service provision</li>
+                <li>No sale of WhatsApp user data</li>
+                <li>No cross-platform data sharing without explicit consent</li>
               </ul>
 
               {/* Section 6 */}
@@ -162,16 +201,27 @@ export default function PrivacyPage() {
                 We may update this Privacy Policy periodically. We will notify you of significant changes via email or prominent notices on our Website. The "Effective Date" at the top indicates the last revision.
               </p>
 
+              {/* New Section 15 - WhatsApp Business Solution Provider Terms */}
+              <h2 className="text-2xl font-bold text-blue-900 mt-8 mb-4">15. WhatsApp Business Solution Provider Terms</h2>
+              <p className="text-blue-900/70 mb-4">As a WhatsApp Business Solution Provider, we:</p>
+              <ul className="list-disc list-inside text-blue-900/70 space-y-2 ml-4">
+                <li>Comply with WhatsApp's Business Terms of Service</li>
+                <li>Follow WhatsApp's Business Data Processing Terms</li>
+                <li>Maintain required security standards</li>
+                <li>Process data only as necessary for service provision</li>
+                <li>Support businesses in maintaining WhatsApp compliance</li>
+              </ul>
+
               {/* Section 15 */}
               <h2 className="text-2xl font-bold text-blue-900 mt-8 mb-4">15. How to Contact Us</h2>
               <p className="text-blue-900/70">For questions, concerns, or to exercise your rights, contact us:</p>
               <ul className="list-none text-blue-900/70 space-y-2 mt-2">
                 <li><strong>Email:</strong> info@kyto.io</li>
-                <li><strong>Address:</strong> 111 NE 1st St, 8th Floor, Suite #88118, Miami, Florida 33132, USA</li>
               </ul>
 
               <p className="text-blue-900/70 mt-8 italic">
-                Thank you for trusting Kyto with your personal data. We are committed to protecting your privacy and ensuring transparency in how we handle your information.
+                Thank you for trusting Kyto with your personal data. We are committed to protecting your privacy and ensuring 
+                transparency in how we handle your information, including our responsibilities as a WhatsApp Business Solution Provider.
               </p>
             </div>
           </div>
